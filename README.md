@@ -1,2 +1,2 @@
 ## Laravel Todo App
-# Simple todo app for learn Laravel.
+### Simple todo app for learn Laravel.
