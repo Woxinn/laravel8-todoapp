@@ -11,7 +11,7 @@
                     <h5 class="card-title">{{ $pano->baslik }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{$pano->aciklama}}</h6>
                 </div>
-                
+
                 <a href="{{route('panolar.show',$pano->id)}}" class="btn btn-success m-2">Panoya Git</a>
                 <div class="row mx-auto">
                     <div class="col-md-10">
@@ -41,6 +41,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="mt-4">
+        <b>* Eğer bir panoyu silerseniz altındaki tüm listeler ve yapılacaklarla birlikte silinir.</b>
     </div>
 
 </x-app-layout>

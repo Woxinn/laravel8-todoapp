@@ -18,8 +18,8 @@ class PanoController extends Controller
      */
     public function index()
     {
-        $panolar = Panolar::where('sahip',User::value('id'))->get();
-        return view('panolar',compact('panolar'));
+        $panolar = Panolar::where('sahip', User::value('id'))->get();
+        return view('panolar', compact('panolar'));
     }
 
     /**
@@ -41,9 +41,9 @@ class PanoController extends Controller
     public function store(PanoRequest $request)
     {
         Panolar::create([
-            'sahip'=>User::value('id'),
-            'baslik'=>$request->pbaslik,
-            'aciklama'=>$request->paciklama,
+            'sahip' => User::value('id'),
+            'baslik' => $request->pbaslik,
+            'aciklama' => $request->paciklama,
         ]);
         return redirect()->route('panolar.index')->withBasarili('Pano başarıyla eklendi.');
     }
@@ -55,13 +55,12 @@ class PanoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {   
-        $listeler = Listeler::where('sahipid',User::value('id'))->where('panoid',$id)->get();
-        
-        
-        
-            return view('listeler')->with(compact('listeler'))->with('panoid',$id);
-        
+    {
+        $listeler = Listeler::where('sahipid', User::value('id'))->where('panoid', $id)->get();
+
+
+
+        return view('listeler')->with(compact('listeler'))->with('panoid', $id);
     }
 
     /**
@@ -94,8 +93,13 @@ class PanoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {   
+    {
+        $listeler = Listeler::where('panoid', $id)->get();
+        foreach ($listeler as $liste) {
+            Yapilacaklar::where('listeid', $liste->id)->delete();
+        }
+        Listeler::where('panoid', $id)->delete();
         Panolar::destroy($id);
-        return redirect()->route('panolar.index')->withBasarili('Pano başarıyla silindi.');
+        return redirect()->route('panolar.index')->withBasarili('Pano ve altındaki kayıtlar başarıyla silindi.');
     }
 }

@@ -16,16 +16,15 @@ use App\Http\Controllers\YapilacakController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
     return view('dashboard');
 })->name('dashboard');
-Route::middleware(['auth:sanctum','verified'])->resource('/panolar',PanoController::class);
-Route::middleware(['auth:sanctum','verified'])->resource('/listeler', ListeController::class);
-Route::middleware(['auth:sanctum','verified'])->get('/yapilacaklar/ekle/{listeid}',YapilacakController::class)->name('yapilacaklar');
-Route::middleware(['auth:sanctum','verified'])->get('/yapilacaklar/durum/{yapilacakid}/{durum}',[YapilacakController::class,'durumguncelle'])->name('yapilacaklar.durum');
-Route::middleware(['auth:sanctum','verified'])->get('/yapilacaklar/sil/{yapilacakid}/',[YapilacakController::class,'sil'])->name('yapilacaklar.sil');
-
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::resource('/panolar', PanoController::class);
+    Route::resource('/listeler', ListeController::class);
+    Route::get('/yapilacaklar/ekle/{listeid}', YapilacakController::class)->name('yapilacaklar');
+    Route::get('/yapilacaklar/durum/{yapilacakid}/{durum}', [YapilacakController::class, 'durumguncelle'])->name('yapilacaklar.durum');
+    Route::get('/yapilacaklar/sil/{yapilacakid}/', [YapilacakController::class, 'sil'])->name('yapilacaklar.sil');
+    Route::get('/yapilacaklar/tasi/{yapilacakid}', [YapilacakController::class, 'tasi'])->name('yapilacaklar.tasi');
+});

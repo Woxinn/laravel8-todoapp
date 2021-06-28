@@ -3,10 +3,13 @@
         Listeler
     </x-slot>
     {{ session()->put('panoid',$panoid) }}
-    
     <div class="row">
-    @foreach ($listeler as $liste)
-    <div class="col-md-4 mt-2">
+        @foreach ($listeler as $liste)
+        @php
+        $tlisteler = $listeler->whereNotIn('id',$liste->id);
+        @endphp
+
+        <div class="col-md-4 mt-2">
             <div class="card" style="min-height:260px;">
                 <div class="card-body">
                     <h5 class="card-title fw-bold listebaslik">{{ $liste->baslik }}</h5>
@@ -18,24 +21,41 @@
                                 <div class="col-md-4 @if ($yapilacak->durum == 'yapildi') {{ 'text-decoration-line-through' }} @endif">{{ $yapilacak->yapilacak }}</div>
                                 <div class="col-md-7">
                                     <div style="float: right;">
-                                    @if ($yapilacak->durum == "yapildi")
-                                        @php    
-                                            $yazi = 'Yapılmadı';
-                                            $butontip = 'warning';
-                                            $guncelle = 'yapilmadi';
+                                        @if ($yapilacak->durum == "yapildi")
+                                        @php
+                                        $yazi = 'Yapılmadı';
+                                        $butontip = 'warning';
+                                        $guncelle = 'yapilmadi';
                                         @endphp
-                                    @else
-                                        @php    
-                                            $yazi = 'Yapıldı';
-                                            $butontip = 'success';
-                                            $guncelle = 'yapildi';
+                                        @else
+                                        @php
+                                        $yazi = 'Yapıldı';
+                                        $butontip = 'success';
+                                        $guncelle = 'yapildi';
                                         @endphp
-                                    @endif
+                                        @endif
                                         <a href="{{route('yapilacaklar.durum',['yapilacakid'=>$yapilacak->id,'durum'=>$guncelle])}}" class="btn btn-sm btn-{{ $butontip }}">
-                                         {{ $yazi }} olarak işaretle</a>
-                                        <button class="btn btn-sm btn-secondary">Düzenle</button>
+                                            {{ $yazi }} olarak işaretle</a>
                                         <a href="{{route('yapilacaklar.sil',$yapilacak->id)}}" class="btn btn-sm btn-danger">Sil</a>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row" style="float:right">
+                                <div class="col-md-12">
+                                    <form action="{{route('yapilacaklar.tasi',$yapilacak->id)}}" method="get">
+                                        @csrf
+                                        <div class="col-md-9">
+                                            <select name="yeniliste" class="form-select" id="">
+                                                <option value="" selected disabled> Başka Listeye Taşı</option>
+                                                @foreach ($tlisteler as $tasiliste)
+                                                <option value="{{ $tasiliste->id }}">{{ $tasiliste->baslik }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="submit" class="btn btn-sm btn-secondary">Taşı</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </li>
@@ -46,12 +66,12 @@
                                 <form action="{{route('yapilacaklar',[$liste->id])}}" method="GET">
                                     @csrf
                                     <div class="row justify-content-center">
-                                    <div class="col-md-6"><input type="text" name="yapilacak" class="form-control mr-3" placeholder="Yapılacak Ekle"></div>
-                                    <div class="col-md-2">
-                                        <div style="float: right;">
-                                            <button type="submit" class="btn btn-md btn-primary">Ekle</button>
+                                        <div class="col-md-6"><input type="text" name="yapilacak" class="form-control mr-3" placeholder="Yapılacak Ekle"></div>
+                                        <div class="col-md-2">
+                                            <div style="float: right;">
+                                                <button type="submit" class="btn btn-md btn-primary">Ekle</button>
+                                            </div>
                                         </div>
-                                    </div>
                                     </div>
                                 </form>
                             </div>
@@ -60,18 +80,18 @@
                 </div>
             </div>
         </div>
-    @endforeach
-        
+        @endforeach
+
 
         <div class="col-md-4 mt-2">
             <div class="card" style="min-height:260px;">
                 <div class="card-body d-flex flex-column justify-content-center align-items-center">
                     <h5 class="card-title fw-bold listebaslik">Yeni Liste Ekle</h5>
-                        <form action="{{route('listeler.store')}}" method="post">
-                            @csrf
-                            <input type="text" name="lbaslik" class="form-control" placeholder="Liste Başlığı">
-                            <button type="submit" style="width: 100%;" class="btn btn-primary mt-2">Ekle</button>
-                        </form>
+                    <form action="{{route('listeler.store')}}" method="post">
+                        @csrf
+                        <input type="text" name="lbaslik" class="form-control" placeholder="Liste Başlığı">
+                        <button type="submit" style="width: 100%;" class="btn btn-primary mt-2">Ekle</button>
+                    </form>
                 </div>
             </div>
         </div>

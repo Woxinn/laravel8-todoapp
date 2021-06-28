@@ -8,26 +8,40 @@ use App\Models\User;
 
 class YapilacakController extends Controller
 {
-    public function __invoke($listeid,Request $request){
+    public function __invoke($listeid, Request $request)
+    {
         Yapilacaklar::create([
-            'sahipid'=>auth()->user()->id,
-            'listeid'=>$listeid,
-            'yapilacak'=>$request->yapilacak,
-            'durum'=>'yapilmadi',
+            'sahipid' => auth()->user()->id,
+            'listeid' => $listeid,
+            'yapilacak' => $request->yapilacak,
+            'durum' => 'yapilmadi',
         ]);
-        return redirect()->route('panolar.show',session()->get('panoid'))->withBasarili('Yapılacak başarıyla eklendi.');
+        return redirect()->route('panolar.show', session()->get('panoid'))->withBasarili('Yapılacak başarıyla eklendi.');
     }
 
-    public function durumguncelle($yapilacakid,$durum){
+    public function durumguncelle($yapilacakid, $durum)
+    {
         $yapilacak = Yapilacaklar::find($yapilacakid);
         $yapilacak->durum = $durum;
         $yapilacak->save();
         return redirect()->back()->withBasarili('Durum başarıyla güncellendi.');
     }
 
-    public function sil($yapilacakid){
+    public function sil($yapilacakid)
+    {
         Yapilacaklar::destroy($yapilacakid);
         return redirect()->back()->withBasarili('Yapılacak başarıyla silindi.');
+    }
 
+    public function tasi($yapilacakid, Request $request)
+    {
+        if ($yapilacakid == null) {
+            $yapilacakt = Yapilacaklar::find($yapilacakid);
+            $yapilacakt->listeid = $request->yeniliste;
+            $yapilacakt->save();
+            return redirect()->back()->withBasarili('Yapılacak başarıyla diğer listeye taşındı.');
+        } else {
+            return redirect()->back()->withBasarili('Lütfen varolan bir liste seçiniz.');
+        }
     }
 }

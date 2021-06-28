@@ -9,5 +9,5 @@ class Panolar extends Model
 {
     use HasFactory;
     protected $table = 'panolar';
-    protected $fillable = ['sahip','baslik','aciklama'];
+    protected $fillable = ['sahip', 'baslik', 'aciklama'];
 }

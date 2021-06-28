@@ -39,11 +39,11 @@ class ListeController extends Controller
     {
         $panoid = session()->get('panoid');
         Listeler::create([
-            'panoid'=>$panoid,
-            'sahipid'=>User::value('id'),
-            'baslik'=>$request->lbaslik,
+            'panoid' => $panoid,
+            'sahipid' => User::value('id'),
+            'baslik' => $request->lbaslik,
         ]);
-        return redirect()->route('panolar.show',$panoid)->withBasarili('Liste başarıyla oluşturuldu.');
+        return redirect()->route('panolar.show', $panoid)->withBasarili('Liste başarıyla oluşturuldu.');
     }
 
     /**

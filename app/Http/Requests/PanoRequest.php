@@ -25,7 +25,7 @@ class PanoRequest extends FormRequest
     {
         return [
             'pbaslik'=>'required|min:2|max:12',
-            'paciklama'=>'min:2|max:12',
+            'paciklama'=>'nullable|min:2|max:12',
         ];
     }
 
